@@ -40,6 +40,9 @@ Test that everything is OK:
         }
     }
 
+You can also use GraphiQL tool (https://github.com/graphql/graphiql) for requests debugging in browser.
+Just open http://localhost:8014/graphiql for this purpose.
+
 Run tests:
 
     (gqclans-falcon) $ inv dev.test --failfast
