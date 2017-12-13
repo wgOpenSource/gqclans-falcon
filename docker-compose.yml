@@ -1,0 +1,30 @@
+version: "2.1"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./ops/web/Dockerfile
+    env_file:
+      - "./ops/docker-services.env"
+    environment:
+      PYTHONUNBUFFERED: 1
+      DB_ADDR: db
+    ports:
+      - "8014:80"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    build:
+      context: .
+      dockerfile: ./ops/postgres/Dockerfile
+    env_file:
+      - "./ops/docker-services.env"
+    volumes:
+      - ./volumes/postgresql:/var/lib/postgresql/data
+    ports:
+      - "5333:5432"
+    healthcheck:
+      interval: 30s
+      timeout: 30s
+      retries: 3
