@@ -1,30 +1,20 @@
 FROM python:3.6.3-slim
 
-RUN mkdir /app
-
-COPY ./requirements.txt /app/requirements.txt
-
-WORKDIR /app
-
 RUN apt-get update && \
     apt-get install -y \
         python-psycopg2 \
-        curl \
-        nginx \
-        supervisor \
-        && \
-    pip install gunicorn && \
-    service supervisor stop && \
-    service nginx stop
+        curl
 
+WORKDIR /app
+COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 
 COPY . /app
 COPY ./ops/web/infrastructure.py /app/config_layers/infrastructure.py
 
-EXPOSE 80
+EXPOSE 8014
 
 HEALTHCHECK --interval=5m --timeout=3s \
-  CMD curl -f "http://localhost:80/graphql?query=\{ping\}" || exit 1
+  CMD curl -f "http://localhost:8014/graphql?query=\{ping\}" || exit 1
 
-CMD supervisord -c /app/ops/web/supervisord.conf -n
+CMD inv dev.runserver --host='0.0.0.0' --port=8014

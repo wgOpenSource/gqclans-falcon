@@ -1,30 +1,26 @@
-version: "2.1"
+version: "2"
 services:
   web:
     build:
       context: .
       dockerfile: ./ops/web/Dockerfile
-    env_file:
-      - "./ops/docker-services.env"
     environment:
       PYTHONUNBUFFERED: 1
       DB_ADDR: db
+      POSTGRES_USER: gqclans_falcon
+      POSTGRES_PASSWORD: gqclans_falcon
+      POSTGRES_DB: gqclans_falcon
     ports:
-      - "8014:80"
+      - "8014:8014"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
   db:
-    build:
-      context: .
-      dockerfile: ./ops/postgres/Dockerfile
-    env_file:
-      - "./ops/docker-services.env"
+    image: postgres:9.6.5
+    environment:
+      POSTGRES_USER: gqclans_falcon
+      POSTGRES_PASSWORD: gqclans_falcon
+      POSTGRES_DB: gqclans_falcon
     volumes:
       - ./volumes/postgresql:/var/lib/postgresql/data
     ports:
       - "5333:5432"
-    healthcheck:
-      interval: 30s
-      timeout: 30s
-      retries: 3
