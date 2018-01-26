@@ -90,3 +90,13 @@ For each command you can get more detailed help:
     Options:
       -r STRING, --range=STRING   Revisions range like [start]:[end].
 
+### Docker
+
+Start application
+
+    $ docker-compose up -d
+
+Run commands
+
+    $ docker-compose run --rm web inv db.upgrade
+

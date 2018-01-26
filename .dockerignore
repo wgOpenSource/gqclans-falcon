@@ -103,5 +103,6 @@ ENV/
 config_layers/infrastructure.py
 config_layers/testing.py
 
-# Docker
-/volumes
+# volumes
+
+./volumes
